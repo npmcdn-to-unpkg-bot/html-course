@@ -1,16 +1,257 @@
 <!DOCTYPE html>
 
-<html lang="nl">
-  <head>
-    <meta charset="UTF-8"/>
-    <title>Dit is mijn titel</title>
-  </head>
-  <body>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <style>
+            @font-face {
+                font-family: 'Roboto';
+                src: url(Roboto-Regular.ttf);
+            }
 
-      <input type="date" min="2010-08-14" max="2011-08-14" value="2010-08-14"/>
+            @keyframes highlight {
+                from {
+                    border-radius: 50%;
+                    transform: rotate(0deg) scale(1);
+                }
 
-      Lorem ipsum dolor <abbr title="Tranfer Control Protocol">TCP</abbr> bla bla bla, Dit is een lang stukje tekst en een coole artist is Jimi&nbsp;Hendrix. En daarbij heb ik niet meer te zeggen. De prijs is 150&nbsp;€
+                50% {
+                    transform: rotate(180deg) scale(1.5);
+                }
 
-      Cool speech at the <abbr title="Democratic National Convention">DNC</abbr>.
-  </body>
+                to {
+                    border-radius: 0;
+                    transform: rotate(360deg) scale(1);
+                }
+            }
+
+            @keyframes fade {
+                from {
+                    opacity: 1.0;
+                }
+
+                to {
+                    opacity: 0.1;
+                }
+            }
+
+            body {
+                font-family: Roboto, sans-serif;
+            }
+
+            h1 {
+                font-weight: normal;
+            }
+
+            table {
+                border-collapse: collapse;
+            }
+
+            td {
+                border: 2px solid black;
+                padding: 0.5rem;
+                box-sizing: border-box;
+                width: 3rem;
+                height: 3rem;
+                text-align: center;
+            }
+
+            form {
+                margin: 2rem 0;
+            }
+
+            .output {
+                margin: 2rem 0;
+            }
+
+            .output span {
+                display: inline-block;
+                padding: 0.5rem;
+                text-align: center;
+                border: 2px solid black;
+                margin: 0.25rem;
+            }
+
+            .prime {
+                animation-name: highlight;
+                animation-duration: 0.5s;
+                animation-iteration-count: 1;
+                animation-timing-function: linear;
+                text-shadow: 0.1rem 0.1rem 0.1rem black;
+                color: white;
+                font-weight: bold;
+            }
+
+            .multiple {
+                animation-name: fade;
+                animation-duration: 0.5s;
+                animation-iteration-count: 1;
+            }
+        </style>
+        <script>
+            eothel = (function() {
+                const LONG_WAIT = 500;
+                const SHORT_WAIT = 100;
+
+                let exports = {};
+
+                exports.NumberTable = function(size) {
+                    this.hue = 0;
+                    let side = Math.sqrt(size);
+                    console.log(`Creating number table of ${size} numbers.`);
+                    let value = 1;
+                    this.nodes = [];
+                    this.table = document.createElement('table');
+                    for(let y = 0; y < side; y++) {
+                        let row = document.createElement('tr');
+                        for(let x = 0; x < side; x++) {
+                            if(value <= size) {
+                                var node = document.createTextNode(value);
+                                let cell = document.createElement('td');
+                                this.nodes.push(cell);
+                                cell.appendChild(node);
+                                row.appendChild(cell);
+                            }
+                            value++;
+                        }
+                        this.table.appendChild(row);
+                    }
+                };
+
+                exports.NumberTable.prototype.currentColor = function() {
+                    return `hsl(${this.hue}, 100%, 50%)`;
+                };
+
+                exports.NumberTable.prototype.nextColor = function() {
+                    this.hue += 30;
+                    return this.currentColor();
+                };
+
+                exports.NumberTable.prototype.node = function(n) {
+                    if(n > this.nodes.length || n < 1) {
+                        throw new Error(`Index out of bounds for node ${n} in list of size ${this.nodes.length}. Index starts at 1.`);
+                    }
+                    return this.nodes[n - 1];
+                };
+
+                exports.NumberTable.prototype.element = function() {
+                    return this.table;
+                };
+
+                exports.NumberTable.prototype.setMultiple = function(n, color) {
+                    var node = this.node(n);
+                    node.setAttribute('class', 'multiple');
+                    node.style.backgroundColor = color;
+                    node.style.opacity = 0.1;
+                };
+
+                exports.NumberTable.prototype.isMultiple = function(n) {
+                    return this.node(n).getAttribute('class') == 'multiple';
+                };
+
+                exports.NumberTable.prototype.setPrime = function(n, color) {
+                    let node = this.node(n);
+                    node.setAttribute("class", "prime");
+                    node.style.backgroundColor = color;
+                    this.onprime(n, this.currentColor());
+                };
+
+                exports.NumberTable.prototype.play = function*() {
+                    this.setMultiple(1, 'white');
+                    let number = 2;
+                    while(number <= this.nodes.length) {
+                        if(!this.isMultiple(number)) {
+                            let color = this.currentColor();
+                            this.setPrime(number, color);
+                            this.nextColor();
+                            yield LONG_WAIT;
+                            let factor = 2, multiple = number * factor;
+                            let hadNewMultiples = false;
+                            while(multiple <= this.nodes.length) {
+                                if(!this.isMultiple(multiple)) {
+                                    yield SHORT_WAIT;
+                                    this.setMultiple(multiple, color);
+                                    hadNewMultiples = true;
+                                }
+                                multiple = number * ++factor;
+                            }
+                            if(hadNewMultiples) {
+                                yield LONG_WAIT;
+                            }
+                        }
+                        number++;
+                    }
+                };
+
+                return exports;
+            }());
+        </script>
+    </head>
+    <body>
+        <h1>Sieve of Eratosthenes</h1>
+        <p>Works in Firefox 48, Chrome 52</p>
+        <p>Does not work in Internet Explorer 11 (uses ES6 features)</p>
+        <form>
+            <div>
+                Limit: <input type="text" id="limit"/>
+                Speed: <input type="range" min="1" value="10" max="100" id="speed"/>
+                <button type="button" id="start" value="1">Start</button>
+            </div>
+        </form>
+        <div id="content">
+
+        </div>
+        <script>
+            const DEFAULT_SIZE = 100;
+
+            let limit = document.getElementById('limit');
+            let startButton = document.getElementById('start');
+            let content = document.getElementById('content');
+            let speed = document.getElementById('speed');
+            let output = document.getElementById('primes');
+            limit.value = DEFAULT_SIZE;
+
+            startButton.onclick = function() {
+                var size = Number(limit.value);
+                if(isNaN(size) || size < 0) {
+                    console.log(`Bogus input. Defaulting to ${DEFAULT_SIZE}`);
+                    limit.value = size = DEFAULT_SIZE;
+                }
+                let table = new eothel.NumberTable(Number(limit.value) || DEFAULT_SIZE);
+                let output = document.createElement("div");
+                output.setAttribute("class", "output");
+                table.onprime = function(prime, color) {
+                    let span = document.createElement('span');
+                    span.setAttribute("class", "prime");
+                    span.innerHTML = prime;
+                    span.style.backgroundColor = color;
+                    if(output.innerHTML == '') {
+                        output.innerHTML = 'Primes: ';
+                    }
+                    output.appendChild(span);
+
+                };
+                content.innerHTML = '';
+                content.appendChild(output);
+                content.appendChild(table.element());
+                let iterator = table.play();
+
+                var frame = function() {
+                    let c = iterator.next();
+                    if(!c.done) {
+                        if(speed.value == 100) {
+                            frame();
+                        } else {
+                            let throttle = speed.value / 10;
+                            let delay = (c.value || 500) / throttle;
+                            setTimeout(frame, delay);
+                        }
+                    }
+                };
+                frame();
+            };
+
+            startButton.click();
+        </script>
+    </body>
 </html>
