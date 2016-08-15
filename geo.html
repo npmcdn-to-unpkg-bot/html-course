@@ -33,6 +33,9 @@
     <body>
         <h1>Geo Tracker</h1>
         <input type="button" value="Clear" id="clear"/>
+        <audio id="audio" controls="controls" style="display: none">
+            <source src="blip.ogg"/>
+        </audio>
         <div id="log"></div>
         <script>
             window.onload = function() {
@@ -47,6 +50,7 @@
             };
 
             function logMessage(message, type) {
+                document.getElementById("audio").play();
                 function time(date) {
                     function padded(r) {
                         return r < 10 ? "0" + r : r;
