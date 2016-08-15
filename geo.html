@@ -4,6 +4,7 @@
     <head>
         <title>Geo Tracker</title>
         <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <style>
             body {
                 font-family: sans-serif;
@@ -40,7 +41,8 @@
 
 
                 navigator.geolocation.watchPosition(register, register, {
-                    enableHighAccuracy: true
+                    enableHighAccuracy: true,
+                    timeout: 5000
                 });
             };
 
