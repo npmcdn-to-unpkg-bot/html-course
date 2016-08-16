@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Objects Arrays Packages Classes</title>
+    </head>
+    <body>
+        <script src="worker.js"></script>
+        <script>
+
+
+            // Arrays
+            document.writeln('<h1>Arrays</h1>');
+            var a = ['Jimi', 'Janis', 'Kurt', 'Amy', 'Jim'];    // Array literal
+            a.push('Kevin');    // Add to end
+            a.unshift('Jimbo'); // Add to front
+
+            document.writeln('<table>');
+            for(var i = 0; i < a.length; i++) {
+                var name = a[i];
+                document.writeln('<tr><td>' + name + '</td></tr>');
+            }
+            document.writeln('</table>');
+            document.writeln('<hr>');
+
+
+            document.writeln('<h1>Object literals</h1>');
+
+            // Object literals
+            var p = {
+                age: 27,
+                sex: 'male',
+                firstName: 'Jimi',
+                lastName: 'Hendrix',
+
+                getFullName: function() {
+                    return this.firstName + " " + this.lastName;
+                },
+
+                setFullName: function(firstName, lastName) {
+                    this.firstName = firstName;
+                    this.lastName = lastName;
+                }
+            };
+
+            p.instrument = 'Guitar';    // Add property dynamically at later point
+
+            document.writeln("<div>" + p.firstName + '</div>');
+            document.writeln("<div>" + p.lastName + '</div>');
+            document.writeln('<div>' + p.instrument + "</div>");
+
+            p.setFullName("Janis", "Joplin");
+            document.writeln("<div>" + p.getFullName() + "</div>");
+            document.writeln('<hr>');
+
+        </script>
+    </body>
+</html>

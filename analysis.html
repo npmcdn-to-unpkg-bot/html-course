@@ -6,6 +6,7 @@
         <meta name="viewport" content="initial-scale=1.0">
         <meta charset="utf-8">
         <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/d3/d3.js"></script>
         <style>
             #container {
                 display: flex;
@@ -68,7 +69,13 @@
                         strokeColor: "red"
                     });
 
-                    document.getElementById("distance").innerHTML = track.inKm().toFixed(2) + 'km';
+                    var d = track.inKm();
+
+                    var time = data[data.length - 1].time - data[0].time;
+                    time = time / 3600000;
+                    var speed = d / time;
+
+                    document.getElementById("distance").innerHTML = d.toFixed(2) + 'km Speed: ' + speed.toFixed(2) + 'km/h';
 
                     var marker = new google.maps.Marker({
                         map: map,

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>My JavaScript Application</title>
+        <script src="myscript.js"></script>
+        <style>
+            table {
+                font-family: sans-serif;
+            }
+
+            td {
+                border: 0.1rem solid black;
+                padding: 1rem;
+                text-align: center;
+            }
+
+            .prime {
+                font-weight: bold;
+                background: linear-gradient(45deg, red, green);
+                color: white;
+                transition-property: transform;
+                transition-duration: 1s;
+                transition-timing-function: linear;
+            }
+
+            .prime:hover {
+                transform: rotate(360deg) scale(2.0);
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Prime Number Highlighter</h1>
+        <p>This application generates a table dynamically in JavaScript and highlights all prime numbers with a cool effect.</p>
+
+        <script>generatePrimeTable(10, 10);</script>
+    </body>
+</html>
