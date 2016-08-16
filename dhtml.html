@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <style>
+            #container {
+                margin: 1rem;
+                padding: 1rem;
+                background-color: red;
+                border: 1px dashed black;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>DHTML</h1>
+
+        <h1>One</h1>
+        <h1>Two</h1>
+        <h1>Three</h1>
+
+        <input type="button" value="Click me" onclick="drawSelectBox()"/>
+
+
+        <div id="container">sdfsdf</div>
+
+        <!--<select>-->
+            <!--<option label="nl">Nederlands</option>-->
+            <!--<option label="fr">Frans</option>-->
+            <!--<option label="en">Engels</option>-->
+            <!--<option label="de">Duits</option>-->
+        <!--</select>-->
+
+        <script>
+            function drawSelectBox() {
+                var c = document.getElementById("container");
+                c.style.backgroundColor = 'hsl(180, 50%, 50%)';
+
+                var ha = document.getElementsByTagName("h1");
+                for(var i = 0; i < ha.length; i++) {
+                    ha[i].style.fontFamily = "sans-serif";
+                    ha[i].innerHTML = "sqfdsfsd";
+                }
+
+                var s = document.createElement("select");
+                var o1 = document.createElement("option");
+                var nl = document.createTextNode("Nederlands");
+                o1.setAttribute("label", "nl");
+                o1.appendChild(nl);
+                s.appendChild(o1);
+
+                var o2 = document.createElement("option");
+                var fr = document.createTextNode("Frans");
+                o2.setAttribute("label", "fr");
+                o2.appendChild(fr);
+                s.appendChild(o2);
+
+                var o3 = document.createElement("option");
+                var en = document.createTextNode("Engels");
+                o3.setAttribute("value", "en");
+                o3.appendChild(en);
+                s.appendChild(o3);
+
+//                c.innerHTML = '';
+                c.appendChild(s);
+
+                c.style.transform = 'rotate(45deg)';
+
+
+            }
+        </script>
+    </body>
+</html>
