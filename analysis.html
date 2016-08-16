@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Analysis</title>
+        <meta name="viewport" content="initial-scale=1.0">
+        <meta charset="utf-8">
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <style>
+            #container {
+                display: flex;
+                height: 45rem;
+                flex-direction: column;
+            }
+
+            #data {
+            }
+
+            #map {
+                border: 0.25rem solid black;
+                flex-grow: 1;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Geo Analyzer</h1>
+        <div id="container">
+            <div id="data">
+                Total distance traveled: <output id="distance"></output>
+            </div>
+            <div id="map"></div>
+        </div>
+
+        <script>
+            function initialize() {
+                // https://groups.google.com/forum/#!topic/google-maps-js-api-v3/Op87g7lBotc
+                google.maps.LatLng.prototype.kmTo = function(a){
+                    var e = Math, ra = e.PI/180;
+                    var b = this.lat() * ra, c = a.lat() * ra, d = b - c;
+                    var g = this.lng() * ra - a.lng() * ra;
+                    var f = 2 * e.asin(e.sqrt(e.pow(e.sin(d/2), 2) + e.cos(b) * e.cos
+                                    (c) * e.pow(e.sin(g/2), 2)));
+                    return f * 6378.137;
+                };
+
+                // https://groups.google.com/forum/#!topic/google-maps-js-api-v3/Op87g7lBotc
+                google.maps.Polyline.prototype.inKm = function(n){
+                    var a = this.getPath(n), len = a.getLength(), dist = 0;
+                    for(var i=0; i<len-1; i++){
+                        dist += a.getAt(i).kmTo(a.getAt(i+1));
+                    }
+                    return dist;
+                };
+
+
+                $.getJSON('sample.json', function(data) {
+                    var startingPoint = {lat: data[0].latitude, lng: data[0].longitude};
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                        center: startingPoint,
+                        zoom: 13
+                    });
+
+                    var track = new google.maps.Polyline({
+                        map: map,
+                        path: data.map((datum) => {
+                            return {lat: datum.latitude, lng: datum.longitude}
+                        }),
+                        strokeColor: "red"
+                    });
+
+                    document.getElementById("distance").innerHTML = track.inKm().toFixed(2) + 'km';
+
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: startingPoint
+                    });
+
+//                    var bikeLayer = new google.maps.BicyclingLayer();
+//                    bikeLayer.setMap(map);
+
+                });
+            }
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKbgYGb4AlAIDz2TsmNpeeY3YJ85WAS3Y&callback=initialize"></script>
+    </body>
+</html>
