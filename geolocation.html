@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Geo Location</title>
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+    </head>
+    <body>
+        <script>
+            var geo = navigator.geolocation;
+
+            var options = {
+                enableHighAccuracy: true
+            };
+
+            geo.watchPosition(success, error, options); // Continuous tracking
+                                                        // Use 'geo.getCurrentPosition()' for single-shot-lookup
+
+            function success(position) {
+                console.log('SUCCESS ' + position.coords.latitude + " " + position.coords.longitude + " " + position.coords.accuracy);
+            }
+
+            function error(positionError) {
+                console.log('ERROR ' + positionError.code);
+            }
+
+        </script>
+    </body>
+</html>

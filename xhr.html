@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>DHTML</title>
+        <style>
+            .movie {
+                background: yellow;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("readystatechange", function(e) {
+                if(xhr.readyState == 4) {
+                    if(xhr.status == 200) { // ALL OK
+                        var movies = JSON.parse(xhr.responseText);
+
+                        for(var i = 0; i < movies.results.length; i++) {
+                            var movie = movies.results[i];
+                            addMovie(movie.title, movie.overview);
+                        }
+                    } else {
+                        console.log('ERROR ' + xhr.statusText);
+                    }
+                }
+            });
+            xhr.open("get", "http://api.themoviedb.org/3/discover/movie?api_key=ca9a1beb4fdc39af636331186dd1cc55", true);
+            xhr.send();
+
+            function addMovie(title, description) {
+                var b = document.body;
+                var movieDiv = document.createElement("div");
+                movieDiv.setAttribute("class", "movie");
+                var h1 = document.createElement("h1");
+                h1.innerHTML = title;
+                movieDiv.appendChild(h1);
+                var p = document.createElement("p");
+                p.innerHTML = description;
+                movieDiv.appendChild(p);
+                b.appendChild(movieDiv);
+            }
+        </script>
+    </body>
+</html>

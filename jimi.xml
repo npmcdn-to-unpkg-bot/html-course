@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<person>
+    <firstName>Jimi</firstName>
+    <lastName>Hendrix</lastName>
+    <songs>
+        <song>Hey Joe</song>
+        <song>Purple Haze</song>
+    </songs>
+</person>

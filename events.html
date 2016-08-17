@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Events</title>
+        <style>
+            #container {
+                position: relative;
+                border: 0.25rem solid black;
+                background-color: green;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+                height: 30rem;
+            }
+
+            #ball {
+                position: absolute;
+                border-radius: 50%;
+                box-sizing: border-box;
+                /*width: 50px;*/
+                /*height: 50px;*/
+                background-color: red;
+                border: 0.25rem solid blue;
+                /*top: 100px;*/
+                /*left: 50px;*/
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Events</h1>
+
+        <svg width="320" height="240">
+            <circle cx="10" cy="10" r="10" id="ball2" fill="red"/>
+        </svg>
+
+        <div id="container">
+            <div id="ball"></div>
+        </div>
+
+
+
+        <script>
+            var div = document.getElementById('container');
+
+            div.addEventListener('mousemove', function(e) {
+                console.log("Client: " + e.clientX + " " + e.clientY);
+
+                changeBallPosition({x: e.clientX, y: e.clientY});
+            });
+
+            function changeBallPosition(point) {
+                const DIAMETER = 50;
+
+                var ball = document.getElementById("ball");
+                ball.style.width = DIAMETER + 'px';
+                ball.style.height = DIAMETER + 'px';
+                console.log(ball.style.width);
+
+                ball.style.left = (point.x - div.offsetLeft - DIAMETER / 2) + 'px';
+                ball.style.top = (point.y - div.offsetTop - DIAMETER / 2) + 'px';
+
+                var b2 = document.getElementById("ball2");
+                b2.setAttribute("r", Math.sin(point.x / 1000) * 100);
+            }
+        </script>
+
+    </body>
+</html>
